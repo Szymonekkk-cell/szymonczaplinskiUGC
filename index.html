@@ -5,8 +5,231 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>SzymonCzaplińskiUGC</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --white: #FAFAF8; --black: #111110; --accent: #C8A96E; --muted: #999894; --border: #E8E8E4; --card: #F3F3EF; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--white); color: var(--black); font-family: 'DM Sans', sans-serif; font-weight: 300; overflow-x: hidden; }
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 1.4rem 3rem; background: rgba(250,250,248,0.88); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-logo { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--black); text-decoration: none; }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a { font-size: 0.82rem; font-weight: 400; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--black); }
+    .hero { min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr; padding-top: 5rem; }
+    .hero-left { display: flex; flex-direction: column; justify-content: center; padding: 6rem 4rem 6rem 5rem; animation: fadeUp 1s ease both; }
+    .hero-tag { font-size: 0.72rem; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 1.6rem; }
+    .hero-name { font-family: 'Playfair Display', serif; font-size: clamp(3rem, 5vw, 5.5rem); line-height: 1.05; font-weight: 700; }
+    .hero-name em { font-style: italic; font-weight: 400; color: var(--accent); }
+    .hero-sub { font-size: 1rem; color: var(--muted); margin-top: 1.6rem; line-height: 1.7; }
+    .hero-cta { display: inline-flex; align-items: center; margin-top: 2.8rem; padding: 0.9rem 2rem; background: var(--black); color: var(--white); font-size: 0.82rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none; transition: background 0.2s; }
+    .hero-cta:hover { background: var(--accent); }
+    .hero-right { background: var(--card); display: flex; align-items: center; justify-content: center; position: relative; }
+    .hero-visual { width: 260px; height: 360px; background: linear-gradient(135deg, #e8e4dc, #d6cfc4); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1rem; box-shadow: 0 24px 60px rgba(0,0,0,0.12); }
+    .hero-avatar { width: 100px; height: 100px; border-radius: 50%; background: linear-gradient(135deg, var(--accent), #a07840); display: flex; align-items: center; justify-content: center; font-family: 'Playfair Display', serif; font-size: 2.4rem; color: white; font-weight: 700; }
+    .hero-card-name { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 700; }
+    .hero-card-role { font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); }
+    .hero-niches { display: flex; gap: 0.4rem; flex-wrap: wrap; justify-content: center; padding: 0 1.5rem; }
+    .niche-tag { font-size: 0.65rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; padding: 0.3rem 0.7rem; background: white; color: var(--muted); border: 1px solid var(--border); }
+    section { padding: 6rem 5rem; }
+    .section-label { font-size: 0.72rem; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent); margin-bottom: 1rem; }
+    .section-title { font-family: 'Playfair Display', serif; font-size: clamp(1.8rem, 3vw, 2.8rem); font-weight: 700; line-height: 1.15; margin-bottom: 1.2rem; }
+    .divider { width: 40px; height: 2px; background: var(--accent); margin-bottom: 2.4rem; }
+    .bio-section { background: var(--white); display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; }
+    .bio-text { font-size: 1.05rem; line-height: 1.85; color: #444; }
+    .bio-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+    .stat-box { background: var(--card); padding: 2rem 1.6rem; border-left: 3px solid var(--accent); opacity: 0; transform: translateY(20px); transition: opacity 0.5s, transform 0.5s; }
+    .stat-box.visible { opacity: 1; transform: none; }
+    .stat-num { font-family: 'Playfair Display', serif; font-size: 2.2rem; font-weight: 700; }
+    .stat-label { font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-top: 0.5rem; }
+    .videos-section { background: var(--card); }
+    .videos-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; margin-top: 2rem; }
+    .video-card { background: var(--white); aspect-ratio: 9/16; max-height: 420px; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 1rem; border: 1px solid var(--border); transition: border-color 0.2s, transform 0.2s; }
+    .video-card:hover { border-color: var(--accent); transform: translateY(-3px); }
+    .video-placeholder-icon { width: 56px; height: 56px; border-radius: 50%; background: var(--accent); display: flex; align-items: center; justify-content: center; }
+    .video-placeholder-icon svg { fill: white; width: 22px; height: 22px; margin-left: 3px; }
+    .video-num { font-family: 'Playfair Display', serif; font-size: 0.95rem; font-weight: 700; }
+    .video-label { font-size: 0.75rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+
+        .portfolio-section { background: var(--white); }
+    .portfolio-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-top: 2rem; }
+    .portfolio-card { background: white; aspect-ratio: 4/5; position: relative; overflow: hidden; cursor: pointer; }
+    .portfolio-card::before { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 40%, rgba(0,0,0,0.75) 100%); opacity: 0; transition: opacity 0.3s; z-index: 1; }
+    .portfolio-card:hover::before { opacity: 1; }
+    .portfolio-bg { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 3rem; transition: transform 0.4s; }
+    .portfolio-card:hover .portfolio-bg { transform: scale(1.05); }
+    .portfolio-info { position: absolute; bottom: 0; left: 0; right: 0; padding: 1.5rem; color: white; z-index: 2; opacity: 0; transform: translateY(10px); transition: opacity 0.3s, transform 0.3s; }
+    .portfolio-card:hover .portfolio-info { opacity: 1; transform: none; }
+    .portfolio-info h3 { font-family: 'Playfair Display', serif; font-size: 1rem; margin-bottom: 0.3rem; }
+    .portfolio-info p { font-size: 0.75rem; color: rgba(255,255,255,0.7); letter-spacing: 0.1em; text-transform: uppercase; }
+    .bg-lifestyle { background: linear-gradient(135deg, #f5ede0, #e8d5b7); }
+    .bg-tech { background: linear-gradient(135deg, #e0e8f5, #b7cce8); }
+    .bg-food { background: linear-gradient(135deg, #f5f0e0, #e8d9b7); }
+    .bg-fashion { background: linear-gradient(135deg, #f0e0f5, #d9b7e8); }
+    .bg-review { background: linear-gradient(135deg, #e0f5ec, #b7e8d0); }
+    .bg-story { background: linear-gradient(135deg, #f5e0e0, #e8b7b7); }
+    .pricing-section { background: var(--card); }
+    .pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-top: 2rem; }
+    .pricing-card { border: 1px solid var(--border); padding: 2.5rem 2rem; position: relative; transition: transform 0.2s, border-color 0.2s; }
+    .pricing-card:hover { transform: translateY(-4px); border-color: var(--accent); }
+    .pricing-card.featured { background: var(--black); color: var(--white); border-color: var(--black); }
+    .pricing-card.featured .pricing-desc { color: rgba(255,255,255,0.55); }
+    .pricing-card.featured .pricing-item { color: rgba(255,255,255,0.7); }
+    .pricing-badge { font-size: 0.65rem; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; padding: 0.3rem 0.8rem; background: var(--accent); color: white; position: absolute; top: -1px; right: 1.5rem; }
+    .pricing-name { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .pricing-price { font-family: 'Playfair Display', serif; font-size: 2.8rem; font-weight: 700; line-height: 1; margin: 1.2rem 0 0.3rem; }
+    .pricing-price span { font-size: 1rem; font-weight: 300; color: var(--muted); }
+    .pricing-desc { font-size: 0.82rem; color: var(--muted); margin-bottom: 1.8rem; line-height: 1.6; }
+    .pricing-items { list-style: none; display: flex; flex-direction: column; gap: 0.7rem; margin-bottom: 2rem; }
+    .pricing-item { font-size: 0.85rem; color: #555; display: flex; align-items: center; gap: 0.6rem; }
+    .pricing-item::before { content: '—'; color: var(--accent); font-weight: 700; }
+    .pricing-btn { display: block; text-align: center; padding: 0.85rem; font-size: 0.78rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; text-decoration: none; border: 1px solid currentColor; transition: background 0.2s, color 0.2s; cursor: pointer; }
+    .pricing-card:not(.featured) .pricing-btn { color: var(--black); }
+    .pricing-card:not(.featured) .pricing-btn:hover { background: var(--black); color: white; border-color: var(--black); }
+    .pricing-card.featured .pricing-btn { color: white; }
+    .pricing-card.featured .pricing-btn:hover { background: var(--accent); border-color: var(--accent); }
+    .contact-section { background: var(--black); color: var(--white); display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; }
+    .contact-section .section-title { color: white; }
+    .contact-text { font-size: 0.95rem; color: rgba(255,255,255,0.55); line-height: 1.8; margin-bottom: 2rem; }
+    .contact-detail { display: flex; align-items: center; gap: 1rem; font-size: 0.88rem; color: rgba(255,255,255,0.55); margin-bottom: 0.8rem; }
+    .contact-detail strong { color: white; }
+    .contact-form { display: flex; flex-direction: column; gap: 1rem; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .form-field { display: flex; flex-direction: column; gap: 0.4rem; }
+    .form-field label { font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(255,255,255,0.4); }
+    .form-field input, .form-field textarea, .form-field select { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); color: white; padding: 0.85rem 1rem; font-family: 'DM Sans', sans-serif; font-size: 0.88rem; outline: none; transition: border-color 0.2s; resize: none; }
+    .form-field input:focus, .form-field textarea:focus, .form-field select:focus { border-color: var(--accent); }
+    .form-submit { padding: 1rem 2rem; background: var(--accent); color: white; border: none; font-family: 'DM Sans', sans-serif; font-size: 0.8rem; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; cursor: pointer; align-self: flex-start; }
+    .success-msg { display: none; padding: 1rem 1.5rem; background: rgba(200,169,110,0.15); border: 1px solid var(--accent); color: var(--accent); font-size: 0.88rem; }
+    footer { background: var(--black); border-top: 1px solid rgba(255,255,255,0.08); padding: 2rem 5rem; display: flex; align-items: center; justify-content: space-between; }
+    .footer-logo { font-family: 'Playfair Display', serif; color: white; font-size: 0.95rem; opacity: 0.5; }
+    .footer-copy { font-size: 0.72rem; color: rgba(255,255,255,0.3); letter-spacing: 0.1em; }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: none; } }
+    @media (max-width: 900px) {
+      nav { padding: 1.2rem 1.5rem; } .nav-links { gap: 1rem; } .hero { grid-template-columns: 1fr; min-height: auto; } .hero-right { min-height: 340px; } .hero-left { padding: 5rem 1.5rem 3rem; } section { padding: 4rem 1.5rem; } .bio-section, .contact-section { grid-template-columns: 1fr; gap: 2.5rem; } .portfolio-grid { grid-template-columns: repeat(2, 1fr); } .pricing-grid { grid-template-columns: 1fr; } footer { flex-direction: column; gap: 0.8rem; padding: 1.5rem; } .form-row { grid-template-columns: 1fr; }
+    }
+  </style>
 </head>
 <body>
-<h1>Zaraz wracam!</h1>
+<nav>
+  <a class="nav-logo" href="#">SzymonCzaplińskiUGC</a>
+  <ul class="nav-links">
+    <li><a href="#bio">O mnie</a></li>
+    <li><a href="#filmy">Filmiki</a></li>
+    <li><a href="#portfolio">Portfolio</a></li>
+    <li><a href="#cennik">Cennik</a></li>
+    <li><a href="#kontakt">Kontakt</a></li>
+  </ul>
+</nav>
+<section class="hero">
+  <div class="hero-left">
+    <p class="hero-tag">UGC Creator · Poland</p>
+    <h1 class="hero-name">Szymon<br><em>Czapliński</em></h1>
+    <p class="hero-sub">Content, który sprzedaje.</p>
+    <a href="#kontakt" class="hero-cta">Zacznijmy współpracę →</a>
+  </div>
+  <div class="hero-right">
+    <div class="hero-visual">
+      <div class="hero-avatar">SC</div>
+      <p class="hero-card-name">Szymon Czapliński</p>
+      <p class="hero-card-role">UGC Creator</p>
+      <div class="hero-niches">
+        <span class="niche-tag">Lifestyle</span>
+        <span class="niche-tag">Tech</span>
+        <span class="niche-tag">Food</span>
+        <span class="niche-tag">Moda</span>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="bio-section" id="bio">
+  <div>
+    <p class="section-label">O mnie</p>
+    <h2 class="section-title">Tworzę content,<br>który sprzedaje</h2>
+    <div class="divider"></div>
+    <p class="bio-text">Jestem UGC Creatorem specjalizującym się w autentycznych materiałach wideo i zdjęciowych dla marek. Tworzę content, który wygląda naturalnie, angażuje odbiorców i buduje zaufanie do produktu.</p>
+  </div>
+  <div class="bio-stats">
+    <div class="stat-box"><div class="stat-num">50+</div><div class="stat-label">Projektów</div></div>
+    <div class="stat-box"><div class="stat-num">4</div><div class="stat-label">Nisze</div></div>
+    <div class="stat-box"><div class="stat-num">100%</div><div class="stat-label">Zadowolonych</div></div>
+    <div class="stat-box"><div class="stat-num">48h</div><div class="stat-label">Realizacja</div></div>
+  </div>
+</section>
+<section class="videos-section" id="filmy">
+  <p class="section-label">Realizacje</p>
+  <h2 class="section-title">Moje filmiki</h2>
+  <div class="divider"></div>
+  <div class="videos-grid">
+    <div class="video-card"><div class="video-placeholder-icon"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div><p class="video-num">Filmik #1</p><p class="video-label">Wklej link</p></div>
+    <div class="video-card"><div class="video-placeholder-icon"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div><p class="video-num">Filmik #2</p><p class="video-label">Wklej link</p></div>
+    <div class="video-card"><div class="video-placeholder-icon"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div><p class="video-num">Filmik #3</p><p class="video-label">Wklej link</p></div>
+    <div class="video-card"><div class="video-placeholder-icon"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div><p class="video-num">Filmik #4</p><p class="video-label">Wklej link</p></div>
+  </div>
+</section>
+<section class="portfolio-section" id="portfolio">
+  <p class="section-label">Portfolio</p>
+  <h2 class="section-title">Przykłady prac</h2>
+  <div class="divider"></div>
+  <div class="portfolio-grid">
+    <div class="portfolio-card"><div class="portfolio-bg bg-lifestyle">🌿</div><div class="portfolio-info"><h3>Morning Routine</h3><p>Lifestyle · Wideo</p></div></div>
+    <div class="portfolio-card"><div class="portfolio-bg bg-tech">📱</div><div class="portfolio-info"><h3>Unboxing Tech</h3><p>Tech · Recenzja</p></div></div>
+    <div class="portfolio-card"><div class="portfolio-bg bg-food">🍜</div><div class="portfolio-info"><h3>Food Content</h3><p>Food · Wideo</p></div></div>
+    <div class="portfolio-card"><div class="portfolio-bg bg-fashion">👕</div><div class="portfolio-info"><h3>OOTD</h3><p>Moda · Styling</p></div></div>
+    <div class="portfolio-card"><div class="portfolio-bg bg-review">⭐</div><div class="portfolio-info"><h3>Product Review</h3><p>Tech · Recenzja</p></div></div>
+    <div class="portfolio-card"><div class="portfolio-bg bg-story">✨</div><div class="portfolio-info"><h3>Brand Story</h3><p>Lifestyle · Storytelling</p></div></div>
+  </div>
+</section>
+<section class="pricing-section" id="cennik">
+  <p class="section-label">Cennik</p>
+  <h2 class="section-title">Pakiety współpracy</h2>
+  <div class="divider"></div>
+  <div class="pricing-grid">
+    <div class="pricing-card"><p class="pricing-name">Starter</p><p class="pricing-price">299 <span>PLN</span></p><p class="pricing-desc">Idealne dla małych marek.</p><ul class="pricing-items"><li class="pricing-item">1 wideo UGC (15–30 sek.)</li><li class="pricing-item">1 runda poprawek</li><li class="pricing-item">Dostawa w 5 dni</li><li class="pricing-item">Prawa do social media</li></ul><a href="#kontakt" class="pricing-btn">Zamów</a></div>
+    <div class="pricing-card featured"><span class="pricing-badge">Popularny</span><p class="pricing-name">Standard</p><p class="pricing-price">599 <span>PLN</span></p><p class="pricing-desc">Najchętniej wybierany pakiet.</p><ul class="pricing-items"><li class="pricing-item">3 wideo UGC (do 60 sek.)</li><li class="pricing-item">Wersje pionowa i pozioma</li><li class="pricing-item">2 rundy poprawek</li><li class="pricing-item">Pełne prawa do reklam</li></ul><a href="#kontakt" class="pricing-btn">Zamów</a></div>
+    <div class="pricing-card"><p class="pricing-name">Pro</p><p class="pricing-price">999 <span>PLN</span></p><p class="pricing-desc">Kompleksowa obsługa contentowa.</p><ul class="pricing-items"><li class="pricing-item">5 wideo UGC + zdjęcia</li><li class="pricing-item">Hook variations (3 wersje)</li><li class="pricing-item">Nielimitowane poprawki</li><li class="pricing-item">Prawa do wszystkich platform</li></ul><a href="#kontakt" class="pricing-btn">Zamów</a></div>
+  </div>
+</section>
+<section class="contact-section" id="kontakt">
+  <div>
+    <p class="section-label" style="color:var(--accent)">Kontakt</p>
+    <h2 class="section-title">Porozmawiajmy<br>o projekcie</h2>
+    <div class="divider"></div>
+    <p class="contact-text">Napisz do mnie — zazwyczaj odpowiadam w ciągu 24 godzin.</p>
+    <div class="contact-detail"><strong>Email</strong> szymonczaplinski7@gmail.com</div>
+    <div class="contact-detail"><strong>Lokalizacja</strong> Polska · Remote</div>
+  </div>
+  <div>
+    <form class="contact-form" onsubmit="handleSubmit(event)">
+      <div class="form-row">
+        <div class="form-field"><label>Imię</label><input type="text" placeholder="Anna Nowak" required /></div>
+        <div class="form-field"><label>Email</label><input type="email" placeholder="anna@marka.pl" required /></div>
+      </div>
+      <div class="form-field"><label>Pakiet</label><select><option>Starter — 299 PLN</option><option>Standard — 599 PLN</option><option>Pro — 999 PLN</option><option>Wycena indywidualna</option></select></div>
+      <div class="form-field"><label>Wiadomość</label><textarea rows="4" placeholder="Opisz swój projekt..."></textarea></div>
+      <button type="submit" class="form-submit">Wyślij wiadomość →</button>
+      <div class="success-msg" id="successMsg">✓ Dziękuję! Odezwę się wkrótce.</div>
+    </form>
+  </div>
+</section>
+<footer>
+  <span class="footer-logo">SzymonCzaplińskiUGC</span>
+  <span class="footer-copy">© 2026 · UGC Creator · Poland</span>
+</footer>
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => { if (e.isIntersecting) setTimeout(() => e.target.classList.add('visible'), i * 120); });
+  }, { threshold: 0.2 });
+  document.querySelectorAll('.stat-box').forEach(el => observer.observe(el));
+  function handleSubmit(e) {
+    e.preventDefault();
+    const msg = document.getElementById('successMsg');
+    msg.style.display = 'block';
+    e.target.querySelector('.form-submit').style.display = 'none';
+    setTimeout(() => { msg.style.display = 'none'; e.target.querySelector('.form-submit').style.display = ''; e.target.reset(); }, 4000);
+  }
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => { const t = document.querySelector(a.getAttribute('href')); if (t) { e.preventDefault(); window.scrollTo({ top: t.offsetTop - 70, behavior: 'smooth' }); }});
+  });
+</script>
 </body>
 </html>
